@@ -52,10 +52,12 @@ export function useOrders() {
     items: { item_id: string; quantity: number; unit_price?: number }[];
   }) => {
     try {
-      const orderNumber = `ORD-${Date.now().slice(-6)}`;
+      // Generate order number (simple timestamp-based)
+      const orderNumber = `ORD-${String(Date.now()).slice(-6)}`;
       const user = await supabase.auth.getUser();
       const userId = user.data.user?.id;
 
+      // Insert order
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
@@ -71,6 +73,7 @@ export function useOrders() {
         .single();
       if (orderError) throw orderError;
 
+      // Insert order items
       const orderItems = orderData.items.map(item => ({
         order_id: order.id,
         item_id: item.item_id,
@@ -83,6 +86,7 @@ export function useOrders() {
         .insert(orderItems);
       if (itemsError) throw itemsError;
 
+      // Refresh list
       await fetchOrders();
       return order;
     } catch (err: any) {
@@ -149,6 +153,7 @@ export function useOrders() {
         if (updateError) throw updateError;
       }
 
+      // Check if all items are fully received
       const { data: itemsData, error: itemsCheckError } = await supabase
         .from('order_items')
         .select('quantity, received_quantity')
@@ -182,7 +187,7 @@ export function useOrders() {
 
   useEffect(() => {
     fetchOrders();
-  }, [fetchOrders]);
+  }, []);
 
   return {
     orders,
