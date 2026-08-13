@@ -36,7 +36,8 @@ export function useAreas() {
         .in('role', ['admin', 'manager'])
         .order('full_name');
       if (error) throw error;
-      setManagers(data as any || []);
+      // Cast to any to bypass TypeScript strictness (partial profile)
+      setManagers(data as any);
     } catch (err: any) {
       setError(err.message);
     }
@@ -92,7 +93,7 @@ export function useAreas() {
   useEffect(() => {
     fetchAreas();
     fetchManagers();
-  }, []);
+  }, [fetchAreas, fetchManagers]);
 
   return {
     areas,

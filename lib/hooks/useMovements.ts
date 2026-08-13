@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Movement, Item, Area, Profile } from '@/types/database.types';
-import { useRealtimeSubscription } from './useRealtimeSubscription';
 
 export type MovementWithDetails = Movement & {
   item: Item | null;
@@ -15,7 +14,6 @@ export function useMovements() {
   const [movements, setMovements] = useState<MovementWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const fetchMovementsRef = useRef<(filters?: { item_id?: string; area_id?: string; type?: string }) => void>(() => {});
 
   const fetchMovements = useCallback(async (filters?: { item_id?: string; area_id?: string; type?: string }) => {
     setLoading(true);
@@ -51,20 +49,6 @@ export function useMovements() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchMovementsRef.current = fetchMovements;
-  }, [fetchMovements]);
-
-  // Realtime subscription
-  useRealtimeSubscription('movements',
-    () => fetchMovementsRef.current(),
-    () => fetchMovementsRef.current(),
-    () => fetchMovementsRef.current()
-  );
-
-  // Also subscribe to stock changes to refresh movements if needed (but movements already updated)
-  // Optional: we can refresh movements when stock changes, but movements are already updated via RPC
-
   const createMovement = async (movementData: {
     item_id: string;
     from_area_id?: string | null;
@@ -86,8 +70,7 @@ export function useMovements() {
         p_note: movementData.note || null,
       });
       if (error) throw error;
-      // Refresh list after creation
-      await fetchMovementsRef.current();
+      await fetchMovements();
       return data;
     } catch (err: any) {
       setError(err.message);
@@ -97,7 +80,7 @@ export function useMovements() {
 
   useEffect(() => {
     fetchMovements();
-  }, []);
+  }, [fetchMovements]);
 
   return {
     movements,
