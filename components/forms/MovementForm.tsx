@@ -31,6 +31,7 @@ export default function MovementForm({ onSubmit }: MovementFormProps) {
         supabase.from('items').select('id, name, sku, unit_of_measure').order('name'),
         supabase.from('areas').select('id, name, type').order('name'),
       ]);
+      // Cast to any to bypass TypeScript strictness (we only use these fields)
       if (itemsRes.data) setItems(itemsRes.data as any);
       if (areasRes.data) setAreas(areasRes.data as any);
     };

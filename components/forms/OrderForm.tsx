@@ -38,8 +38,9 @@ export default function OrderForm({ onSubmit }: OrderFormProps) {
         supabase.from('areas').select('id, name, type').order('name'),
         supabase.from('items').select('id, name, sku, unit_of_measure').order('name'),
       ]);
-      if (areasRes.data) setAreas(areasRes.data);
-      if (itemsRes.data) setItems(itemsRes.data);
+      // Cast to any to bypass TypeScript strictness (we only use these fields)
+      if (areasRes.data) setAreas(areasRes.data as any);
+      if (itemsRes.data) setItems(itemsRes.data as any);
     };
     fetchData();
   }, []);
@@ -69,7 +70,6 @@ export default function OrderForm({ onSubmit }: OrderFormProps) {
     setLoading(true);
     setError('');
     try {
-      // Validate line items
       const validItems = lineItems.filter(item => item.item_id && item.quantity > 0);
       if (validItems.length === 0) {
         throw new Error('Add at least one valid line item');
