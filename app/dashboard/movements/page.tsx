@@ -3,12 +3,32 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useMovements } from '@/lib/hooks/useMovements';
+import { useRealtimeSubscription } from '@/lib/hooks/useRealtimeSubscription';
 import { formatDate } from '@/lib/utils/formatDate';
-import { Plus, Filter } from 'lucide-react';
+import { Plus, Filter, Bell } from 'lucide-react';
 
 export default function MovementsPage() {
   const { movements, loading, error, fetchMovements } = useMovements();
   const [filters, setFilters] = useState({ item_id: '', area_id: '', type: '' });
+  const [newMovements, setNewMovements] = useState(0);
+
+  // Realtime subscription for new movements
+  useRealtimeSubscription('movements', 'INSERT', (payload) => {
+    setNewMovements(prev => prev + 1);
+    // Optionally show a toast or notification
+  });
+
+  // Refresh movements when new movement count > 0, but we'll let user refresh manually or auto-refresh after a delay
+  // For better UX, we could auto-refresh after 2 seconds
+  useEffect(() => {
+    if (newMovements > 0) {
+      const timer = setTimeout(() => {
+        fetchMovements(filters);
+        setNewMovements(0);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [newMovements]);
 
   useEffect(() => {
     fetchMovements(filters);
@@ -24,7 +44,14 @@ export default function MovementsPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Stock Movements</h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-bold">Stock Movements</h1>
+          {newMovements > 0 && (
+            <span className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full flex items-center gap-1">
+              <Bell size={14} /> {newMovements} new
+            </span>
+          )}
+        </div>
         <Link
           href="/dashboard/movements/new"
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
