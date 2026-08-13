@@ -4,9 +4,22 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAreas } from '@/lib/hooks/useAreas';
 import AreaForm from '@/components/forms/AreaForm';
 import { useEffect, useState } from 'react';
-import { Area, Stock } from '@/types/database.types';
+import { Area } from '@/types/database.types';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+
+// Define a local type for stock with item details
+type StockWithItem = {
+  id: string;
+  quantity: number;
+  last_updated: string;
+  item: {
+    id: string;
+    name: string;
+    sku: string;
+    unit_of_measure: string;
+  } | null;
+};
 
 export default function EditAreaPage() {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +27,7 @@ export default function EditAreaPage() {
   const supabase = createClient();
   const { areas, managers, updateArea, loading } = useAreas();
   const [area, setArea] = useState<Area | null>(null);
-  const [stock, setStock] = useState<Stock[]>([]);
+  const [stock, setStock] = useState<StockWithItem[]>([]);
   const [stockLoading, setStockLoading] = useState(true);
 
   useEffect(() => {
@@ -38,6 +51,7 @@ export default function EditAreaPage() {
           .eq('area_id', id)
           .order('item->name');
         if (error) throw error;
+        // data is an array with item as an object, not array
         setStock(data || []);
       } catch (err) {
         console.error(err);

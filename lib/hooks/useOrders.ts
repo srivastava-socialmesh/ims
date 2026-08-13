@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Order, OrderItem, Item, Area, Profile } from '@/types/database.types';
+import { useRealtimeSubscription } from './useRealtimeSubscription';
 
 export type OrderWithDetails = Order & {
   area: Area | null;
@@ -13,6 +14,7 @@ export function useOrders() {
   const [orders, setOrders] = useState<OrderWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const fetchOrdersRef = useRef<(filters?: { status?: string; type?: string; area_id?: string }) => void>(() => {});
 
   const fetchOrders = useCallback(async (filters?: { status?: string; type?: string; area_id?: string }) => {
     setLoading(true);
@@ -44,6 +46,22 @@ export function useOrders() {
     }
   }, []);
 
+  useEffect(() => {
+    fetchOrdersRef.current = fetchOrders;
+  }, [fetchOrders]);
+
+  // Realtime subscription for orders and order_items
+  useRealtimeSubscription('orders',
+    () => fetchOrdersRef.current(),
+    () => fetchOrdersRef.current(),
+    () => fetchOrdersRef.current()
+  );
+  useRealtimeSubscription('order_items',
+    () => fetchOrdersRef.current(),
+    () => fetchOrdersRef.current(),
+    () => fetchOrdersRef.current()
+  );
+
   const createOrder = async (orderData: {
     order_type: 'purchase' | 'work';
     area_id: string;
@@ -52,12 +70,10 @@ export function useOrders() {
     items: { item_id: string; quantity: number; unit_price?: number }[];
   }) => {
     try {
-      // Generate order number (simple timestamp-based)
       const orderNumber = `ORD-${Date.now().slice(-6)}`;
       const user = await supabase.auth.getUser();
       const userId = user.data.user?.id;
 
-      // Insert order
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
@@ -73,7 +89,6 @@ export function useOrders() {
         .single();
       if (orderError) throw orderError;
 
-      // Insert order items
       const orderItems = orderData.items.map(item => ({
         order_id: order.id,
         item_id: item.item_id,
@@ -86,8 +101,7 @@ export function useOrders() {
         .insert(orderItems);
       if (itemsError) throw itemsError;
 
-      // Refresh list
-      await fetchOrders();
+      await fetchOrdersRef.current();
       return order;
     } catch (err: any) {
       setError(err.message);
@@ -102,7 +116,7 @@ export function useOrders() {
         .update({ status: newStatus, updated_at: new Date().toISOString() })
         .eq('id', orderId);
       if (error) throw error;
-      await fetchOrders();
+      await fetchOrdersRef.current();
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -111,11 +125,9 @@ export function useOrders() {
 
   const receiveOrderItems = async (orderId: string, receivedItems: { order_item_id: string; quantity: number }[]) => {
     try {
-      // For each received item, create a movement (receipt) and update received_quantity
       const user = await supabase.auth.getUser();
       const userId = user.data.user?.id;
 
-      // Get order details for area
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .select('area_id')
@@ -124,7 +136,6 @@ export function useOrders() {
       if (orderError) throw orderError;
 
       for (const item of receivedItems) {
-        // Get order_item details
         const { data: orderItem, error: oiError } = await supabase
           .from('order_items')
           .select('item_id, received_quantity, quantity')
@@ -137,7 +148,6 @@ export function useOrders() {
           throw new Error(`Received quantity exceeds ordered quantity for item`);
         }
 
-        // Record movement (receipt)
         const { error: movError } = await supabase.rpc('record_movement', {
           p_item_id: orderItem.item_id,
           p_from_area_id: null,
@@ -150,7 +160,6 @@ export function useOrders() {
         });
         if (movError) throw movError;
 
-        // Update received_quantity in order_items
         const { error: updateError } = await supabase
           .from('order_items')
           .update({ received_quantity: newReceived })
@@ -158,7 +167,6 @@ export function useOrders() {
         if (updateError) throw updateError;
       }
 
-      // Check if all items are fully received => update order status to completed
       const { data: itemsData, error: itemsCheckError } = await supabase
         .from('order_items')
         .select('quantity, received_quantity')
@@ -169,7 +177,7 @@ export function useOrders() {
         await updateOrderStatus(orderId, 'completed');
       }
 
-      await fetchOrders();
+      await fetchOrdersRef.current();
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -183,7 +191,7 @@ export function useOrders() {
         .delete()
         .eq('id', orderId);
       if (error) throw error;
-      await fetchOrders();
+      await fetchOrdersRef.current();
     } catch (err: any) {
       setError(err.message);
       throw err;

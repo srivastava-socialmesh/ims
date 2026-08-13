@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Item, Category } from '@/types/database.types';
+import { useRealtimeSubscription } from './useRealtimeSubscription';
 
 export function useInventory() {
   const supabase = createClient();
@@ -8,6 +9,8 @@ export function useInventory() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const fetchItemsRef = useRef<() => void>(() => {});
+  const fetchCategoriesRef = useRef<() => void>(() => {});
 
   const fetchItems = useCallback(async (search?: string) => {
     setLoading(true);
@@ -18,11 +21,9 @@ export function useInventory() {
           *,
           category:categories(*)
         `);
-
       if (search) {
         query = query.ilike('name', `%${search}%`);
       }
-
       const { data, error } = await query.order('name');
       if (error) throw error;
       setItems(data || []);
@@ -45,6 +46,25 @@ export function useInventory() {
       setError(err.message);
     }
   }, []);
+
+  // Store refs for realtime callbacks
+  useEffect(() => {
+    fetchItemsRef.current = () => fetchItems();
+    fetchCategoriesRef.current = fetchCategories;
+  }, [fetchItems, fetchCategories]);
+
+  // Realtime subscriptions
+  useRealtimeSubscription('items', 
+    () => fetchItemsRef.current(),
+    () => fetchItemsRef.current(),
+    () => fetchItemsRef.current()
+  );
+
+  useRealtimeSubscription('categories',
+    () => fetchCategoriesRef.current(),
+    () => fetchCategoriesRef.current(),
+    () => fetchCategoriesRef.current()
+  );
 
   const createItem = async (item: Omit<Item, 'id' | 'created_at'>) => {
     try {

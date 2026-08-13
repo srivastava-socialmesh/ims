@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Area, Profile } from '@/types/database.types';
+import { useRealtimeSubscription } from './useRealtimeSubscription';
 
 export function useAreas() {
   const supabase = createClient();
@@ -8,6 +9,7 @@ export function useAreas() {
   const [managers, setManagers] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const fetchAreasRef = useRef<() => void>(() => {});
 
   const fetchAreas = useCallback(async () => {
     setLoading(true);
@@ -41,6 +43,16 @@ export function useAreas() {
       setError(err.message);
     }
   }, []);
+
+  useEffect(() => {
+    fetchAreasRef.current = fetchAreas;
+  }, [fetchAreas]);
+
+  useRealtimeSubscription('areas',
+    () => fetchAreasRef.current(),
+    () => fetchAreasRef.current(),
+    () => fetchAreasRef.current()
+  );
 
   const createArea = async (area: Omit<Area, 'id' | 'created_at'>) => {
     try {
