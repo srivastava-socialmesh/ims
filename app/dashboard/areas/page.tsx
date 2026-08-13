@@ -58,44 +58,47 @@ export default function AreasPage() {
           {filteredAreas.length === 0 ? (
             <div className="col-span-full text-center text-gray-500">No areas found</div>
           ) : (
-            filteredAreas.map((area) => (
-              <div key={area.id} className="bg-white rounded-lg shadow p-6 border border-gray-200">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-semibold">{area.name}</h3>
-                    <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
-                      <MapPin size={14} />
-                      {area.location || 'No location'}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Type: <span className="capitalize">{area.type}</span>
-                    </p>
-                    {area.manager && (
-                      <p className="text-sm text-gray-500 mt-1">
-                        Manager: {area.manager.full_name || 'Unassigned'}
+            filteredAreas.map((area) => {
+              const areaWithManager = area as any;
+              return (
+                <div key={area.id} className="bg-white rounded-lg shadow p-6 border border-gray-200">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-lg font-semibold">{area.name}</h3>
+                      <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                        <MapPin size={14} />
+                        {area.location || 'No location'}
                       </p>
-                    )}
-                    <p className="text-xs text-gray-400 mt-2">
-                      Created: {formatDateShort(area.created_at)}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/dashboard/areas/${area.id}`}
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      <Edit size={18} />
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(area.id)}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <Trash2 size={18} />
-                    </button>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Type: <span className="capitalize">{area.type}</span>
+                      </p>
+                      {areaWithManager.manager && (
+                        <p className="text-sm text-gray-500 mt-1">
+                          Manager: {areaWithManager.manager.full_name || 'Unassigned'}
+                        </p>
+                      )}
+                      <p className="text-xs text-gray-400 mt-2">
+                        Created: {formatDateShort(area.created_at)}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Link
+                        href={`/dashboard/areas/${area.id}`}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        <Edit size={18} />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(area.id)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       )}
