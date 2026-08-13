@@ -13,11 +13,13 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  FolderTree,
 } from 'lucide-react';
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Inventory', href: '/dashboard/inventory', icon: Package },
+  { name: 'Categories', href: '/dashboard/inventory/categories', icon: FolderTree },
   { name: 'Areas', href: '/dashboard/areas', icon: MapPin },
   { name: 'Movements', href: '/dashboard/movements', icon: MoveRight },
   { name: 'Orders', href: '/dashboard/orders', icon: ClipboardList },
@@ -35,7 +37,6 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_OUT') router.push('/login');
     });
@@ -49,11 +50,8 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <aside className="w-64 bg-gray-900 text-white flex flex-col">
-        <div className="p-4 text-xl font-bold border-b border-gray-700">
-          InvMS
-        </div>
+        <div className="p-4 text-xl font-bold border-b border-gray-700">InvMS</div>
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -82,8 +80,6 @@ export default function DashboardLayout({
           </button>
         </div>
       </aside>
-
-      {/* Main content */}
       <main className="flex-1 overflow-y-auto bg-gray-50">
         <div className="p-6">{children}</div>
       </main>
