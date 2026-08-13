@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { subDays, format } from 'date-fns';
+import { useOrganization } from '@/lib/context/OrganizationContext';
 
 type MovementTrend = { date: string; count: number };
 type AreaStock = { area_name: string; total_quantity: number };
@@ -8,6 +9,7 @@ type LowStockItem = { item_id: string; item_name: string; sku: string; area_name
 
 export function useReports() {
   const supabase = createClient();
+  const { orgId } = useOrganization();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,40 +21,41 @@ export function useReports() {
   const [areaStock, setAreaStock] = useState<AreaStock[]>([]);
 
   const fetchReports = useCallback(async () => {
+    if (!orgId) return;
     setLoading(true);
     setError(null);
     try {
-      // 1. Total items
       const { count: itemsCount, error: itemsErr } = await supabase
         .from('items')
-        .select('*', { count: 'exact', head: true });
+        .select('*', { count: 'exact', head: true })
+        .eq('organization_id', orgId);
       if (itemsErr) throw itemsErr;
       setTotalItems(itemsCount || 0);
 
-      // 2. Total areas
       const { count: areasCount, error: areasErr } = await supabase
         .from('areas')
-        .select('*', { count: 'exact', head: true });
+        .select('*', { count: 'exact', head: true })
+        .eq('organization_id', orgId);
       if (areasErr) throw areasErr;
       setTotalAreas(areasCount || 0);
 
-      // 3. Total movements in last 30 days
       const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
       const { count: movCount, error: movErr } = await supabase
         .from('movements')
         .select('*', { count: 'exact', head: true })
+        .eq('organization_id', orgId)
         .gte('created_at', thirtyDaysAgo);
       if (movErr) throw movErr;
       setTotalMovements30d(movCount || 0);
 
-      // 4. Low stock items: fetch all stock with item details, filter client-side
       const { data: stockData, error: stockErr } = await supabase
         .from('stock')
         .select(`
           quantity,
           items ( id, name, sku, reorder_level ),
           areas ( name )
-        `);
+        `)
+        .eq('organization_id', orgId);
       if (stockErr) throw stockErr;
       const lowItems = (stockData || [])
         .filter((s: any) => s.items && s.quantity < s.items.reorder_level)
@@ -66,11 +69,11 @@ export function useReports() {
         }));
       setLowStockItems(lowItems);
 
-      // 5. Movement trend: last 7 days
       const sevenDaysAgo = subDays(new Date(), 7).toISOString();
       const { data: trendData, error: trendErr } = await supabase
         .from('movements')
         .select('created_at')
+        .eq('organization_id', orgId)
         .gte('created_at', sevenDaysAgo);
       if (trendErr) throw trendErr;
       const dateCounts: Record<string, number> = {};
@@ -85,13 +88,13 @@ export function useReports() {
       }
       setMovementTrend(trend);
 
-      // 6. Stock by area
       const { data: areaData, error: areaErr } = await supabase
         .from('stock')
         .select(`
           areas ( name ),
           quantity
-        `);
+        `)
+        .eq('organization_id', orgId);
       if (areaErr) throw areaErr;
       const areaMap: Record<string, number> = {};
       areaData?.forEach((s: any) => {
@@ -109,11 +112,11 @@ export function useReports() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [orgId]);
 
   useEffect(() => {
-    fetchReports();
-  }, []);
+    if (orgId) fetchReports();
+  }, [orgId, fetchReports]);
 
   return {
     loading,

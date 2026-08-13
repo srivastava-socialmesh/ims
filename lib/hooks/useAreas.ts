@@ -1,15 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Area, Profile } from '@/types/database.types';
+import { useOrganization } from '@/lib/context/OrganizationContext';
 
 export function useAreas() {
   const supabase = createClient();
+  const { orgId } = useOrganization();
   const [areas, setAreas] = useState<Area[]>([]);
   const [managers, setManagers] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchAreas = useCallback(async () => {
+    if (!orgId) return;
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -18,6 +21,7 @@ export function useAreas() {
           *,
           manager:profiles(id, full_name)
         `)
+        .eq('organization_id', orgId)
         .order('name');
       if (error) throw error;
       setAreas(data || []);
@@ -26,28 +30,30 @@ export function useAreas() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [orgId]);
 
   const fetchManagers = useCallback(async () => {
+    if (!orgId) return;
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('id, full_name, role')
+        .eq('organization_id', orgId)
         .in('role', ['admin', 'manager'])
         .order('full_name');
       if (error) throw error;
-      // Cast to any to bypass TypeScript strictness (partial profile)
-      setManagers(data as any);
+      setManagers(data || []);
     } catch (err: any) {
       setError(err.message);
     }
-  }, []);
+  }, [orgId]);
 
   const createArea = async (area: Omit<Area, 'id' | 'created_at'>) => {
+    if (!orgId) throw new Error('No organization');
     try {
       const { data, error } = await supabase
         .from('areas')
-        .insert(area)
+        .insert({ ...area, organization_id: orgId })
         .select()
         .single();
       if (error) throw error;
@@ -60,11 +66,13 @@ export function useAreas() {
   };
 
   const updateArea = async (id: string, updates: Partial<Area>) => {
+    if (!orgId) throw new Error('No organization');
     try {
       const { data, error } = await supabase
         .from('areas')
         .update(updates)
         .eq('id', id)
+        .eq('organization_id', orgId)
         .select()
         .single();
       if (error) throw error;
@@ -77,11 +85,13 @@ export function useAreas() {
   };
 
   const deleteArea = async (id: string) => {
+    if (!orgId) throw new Error('No organization');
     try {
       const { error } = await supabase
         .from('areas')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .eq('organization_id', orgId);
       if (error) throw error;
       setAreas(prev => prev.filter(area => area.id !== id));
     } catch (err: any) {
@@ -91,9 +101,11 @@ export function useAreas() {
   };
 
   useEffect(() => {
-    fetchAreas();
-    fetchManagers();
-  }, [fetchAreas, fetchManagers]);
+    if (orgId) {
+      fetchAreas();
+      fetchManagers();
+    }
+  }, [orgId, fetchAreas, fetchManagers]);
 
   return {
     areas,
