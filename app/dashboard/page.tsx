@@ -24,11 +24,11 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-8">
-      {/* Welcome banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white shadow-lg">
-        <h1 className="text-3xl font-bold">Welcome back, Admin 👋</h1>
-        <p className="text-blue-100 mt-2">Here's what's happening with your inventory today.</p>
+    <div className="space-y-6">
+      {/* Welcome message as page header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">Welcome back, Admin 👋</h1>
+        <p className="text-gray-500 mt-1">Here's what's happening with your inventory today.</p>
       </div>
 
       {/* Stats */}
