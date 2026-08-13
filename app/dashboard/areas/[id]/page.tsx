@@ -4,22 +4,11 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAreas } from '@/lib/hooks/useAreas';
 import AreaForm from '@/components/forms/AreaForm';
 import { useEffect, useState } from 'react';
-import { Area } from '@/types/database.types';
+import { Area, Stock, Item } from '@/types/database.types';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 
-// Define a local type for stock with item details
-type StockWithItem = {
-  id: string;
-  quantity: number;
-  last_updated: string;
-  item: {
-    id: string;
-    name: string;
-    sku: string;
-    unit_of_measure: string;
-  } | null;
-};
+type StockWithItem = Stock & { item: Item | null };
 
 export default function EditAreaPage() {
   const { id } = useParams<{ id: string }>();
@@ -46,13 +35,16 @@ export default function EditAreaPage() {
             id,
             quantity,
             last_updated,
-            item:items(id, name, sku, unit_of_measure)
+            items ( id, name, sku, unit_of_measure )
           `)
-          .eq('area_id', id)
-          .order('item->name');
+          .eq('area_id', id);
         if (error) throw error;
-        // data is an array with item as an object, not array
-        setStock(data || []);
+        // Supabase returns the joined relation as an array – pick the first
+        const mapped = (data || []).map((s: any) => ({
+          ...s,
+          item: s.items?.[0] || null,
+        }));
+        setStock(mapped);
       } catch (err) {
         console.error(err);
       } finally {
@@ -103,9 +95,9 @@ export default function EditAreaPage() {
               <tbody>
                 {stock.map((s) => (
                   <tr key={s.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{s.item?.sku}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{s.item?.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{s.item?.unit_of_measure}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{s.item?.sku || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{s.item?.name || 'Unknown'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{s.item?.unit_of_measure || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{s.quantity}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {new Date(s.last_updated).toLocaleString()}
