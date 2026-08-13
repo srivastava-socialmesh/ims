@@ -1,0 +1,94 @@
+import { useState, useEffect, useCallback } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { Movement, Item, Area, Profile } from '@/types/database.types';
+
+export type MovementWithDetails = Movement & {
+  item: Item | null;
+  from_area: Area | null;
+  to_area: Area | null;
+  performer: Profile | null;
+};
+
+export function useMovements() {
+  const supabase = createClient();
+  const [movements, setMovements] = useState<MovementWithDetails[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchMovements = useCallback(async (filters?: { item_id?: string; area_id?: string; type?: string }) => {
+    setLoading(true);
+    try {
+      let query = supabase
+        .from('movements')
+        .select(`
+          *,
+          item:items(*),
+          from_area:areas!from_area_id(*),
+          to_area:areas!to_area_id(*),
+          performer:profiles(*)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (filters?.item_id) {
+        query = query.eq('item_id', filters.item_id);
+      }
+      if (filters?.area_id) {
+        query = query.or(`from_area_id.eq.${filters.area_id},to_area_id.eq.${filters.area_id}`);
+      }
+      if (filters?.type) {
+        query = query.eq('movement_type', filters.type);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      setMovements(data || []);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const createMovement = async (movementData: {
+    item_id: string;
+    from_area_id?: string | null;
+    to_area_id?: string | null;
+    quantity: number;
+    movement_type: string;
+    reference?: string;
+    note?: string;
+  }) => {
+    try {
+      // Call the database function
+      const { data, error } = await supabase.rpc('record_movement', {
+        p_item_id: movementData.item_id,
+        p_from_area_id: movementData.from_area_id || null,
+        p_to_area_id: movementData.to_area_id || null,
+        p_quantity: movementData.quantity,
+        p_movement_type: movementData.movement_type,
+        p_reference: movementData.reference || null,
+        p_performed_by: (await supabase.auth.getUser()).data.user?.id || null,
+        p_note: movementData.note || null,
+      });
+      if (error) throw error;
+      // Refresh list after creation
+      await fetchMovements();
+      return data;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    fetchMovements();
+  }, []);
+
+  return {
+    movements,
+    loading,
+    error,
+    fetchMovements,
+    createMovement,
+  };
+}
