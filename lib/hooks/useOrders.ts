@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Order, OrderItem, Item, Area, Profile } from '@/types/database.types';
-import { useRealtimeSubscription } from './useRealtimeSubscription';
 
 export type OrderWithDetails = Order & {
   area: Area | null;
@@ -14,7 +13,6 @@ export function useOrders() {
   const [orders, setOrders] = useState<OrderWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const fetchOrdersRef = useRef<(filters?: { status?: string; type?: string; area_id?: string }) => void>(() => {});
 
   const fetchOrders = useCallback(async (filters?: { status?: string; type?: string; area_id?: string }) => {
     setLoading(true);
@@ -45,22 +43,6 @@ export function useOrders() {
       setLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    fetchOrdersRef.current = fetchOrders;
-  }, [fetchOrders]);
-
-  // Realtime subscription for orders and order_items
-  useRealtimeSubscription('orders',
-    () => fetchOrdersRef.current(),
-    () => fetchOrdersRef.current(),
-    () => fetchOrdersRef.current()
-  );
-  useRealtimeSubscription('order_items',
-    () => fetchOrdersRef.current(),
-    () => fetchOrdersRef.current(),
-    () => fetchOrdersRef.current()
-  );
 
   const createOrder = async (orderData: {
     order_type: 'purchase' | 'work';
@@ -101,7 +83,7 @@ export function useOrders() {
         .insert(orderItems);
       if (itemsError) throw itemsError;
 
-      await fetchOrdersRef.current();
+      await fetchOrders();
       return order;
     } catch (err: any) {
       setError(err.message);
@@ -116,7 +98,7 @@ export function useOrders() {
         .update({ status: newStatus, updated_at: new Date().toISOString() })
         .eq('id', orderId);
       if (error) throw error;
-      await fetchOrdersRef.current();
+      await fetchOrders();
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -177,7 +159,7 @@ export function useOrders() {
         await updateOrderStatus(orderId, 'completed');
       }
 
-      await fetchOrdersRef.current();
+      await fetchOrders();
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -191,7 +173,7 @@ export function useOrders() {
         .delete()
         .eq('id', orderId);
       if (error) throw error;
-      await fetchOrdersRef.current();
+      await fetchOrders();
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -200,7 +182,7 @@ export function useOrders() {
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   return {
     orders,
