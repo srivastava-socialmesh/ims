@@ -45,27 +45,29 @@ export function useReports() {
       if (movErr) throw movErr;
       setTotalMovements30d(movCount || 0);
 
-      // 4. Low stock items: join items and stock where quantity < reorder_level
-      const { data: lowData, error: lowErr } = await supabase
+      // 4. Low stock items: fetch stock with item and area, then filter in JS
+      const { data: stockData, error: stockErr } = await supabase
         .from('stock')
         .select(`
+          id,
+          quantity,
           item:items(id, name, sku, reorder_level),
-          area:areas(name),
-          quantity
-        `)
-        .lt('quantity', supabase.raw('??', ['items.reorder_level']));
-      if (lowErr) throw lowErr;
-      const lowItems = lowData?.map((s: any) => ({
-        item_id: s.item.id,
-        item_name: s.item.name,
-        sku: s.item.sku,
-        area_name: s.area.name,
-        quantity: s.quantity,
-        reorder_level: s.item.reorder_level,
-      })) || [];
+          area:areas(name)
+        `);
+      if (stockErr) throw stockErr;
+      const lowItems = stockData
+        ?.filter((s: any) => s.item && s.quantity < s.item.reorder_level)
+        .map((s: any) => ({
+          item_id: s.item.id,
+          item_name: s.item.name,
+          sku: s.item.sku,
+          area_name: s.area?.name || 'Unknown',
+          quantity: s.quantity,
+          reorder_level: s.item.reorder_level,
+        })) || [];
       setLowStockItems(lowItems);
 
-      // 5. Movement trend: last 7 days, count per day
+      // 5. Movement trend: last 7 days
       const sevenDaysAgo = subDays(new Date(), 7).toISOString();
       const { data: trendData, error: trendErr } = await supabase
         .from('movements')
@@ -73,13 +75,11 @@ export function useReports() {
         .gte('created_at', sevenDaysAgo);
       if (trendErr) throw trendErr;
       
-      // Group by date
       const dateCounts: Record<string, number> = {};
       trendData?.forEach((m: any) => {
         const d = format(new Date(m.created_at), 'yyyy-MM-dd');
         dateCounts[d] = (dateCounts[d] || 0) + 1;
       });
-      // Fill missing days with 0
       const trend: MovementTrend[] = [];
       for (let i = 6; i >= 0; i--) {
         const d = format(subDays(new Date(), i), 'yyyy-MM-dd');
@@ -87,16 +87,16 @@ export function useReports() {
       }
       setMovementTrend(trend);
 
-      // 6. Stock by area: sum quantities per area
-      const { data: stockData, error: stockErr } = await supabase
+      // 6. Stock by area
+      const { data: stockAreaData, error: areaErr } = await supabase
         .from('stock')
         .select(`
           area:areas(name),
           quantity
         `);
-      if (stockErr) throw stockErr;
+      if (areaErr) throw areaErr;
       const areaMap: Record<string, number> = {};
-      stockData?.forEach((s: any) => {
+      stockAreaData?.forEach((s: any) => {
         const name = s.area?.name || 'Unknown';
         areaMap[name] = (areaMap[name] || 0) + s.quantity;
       });
