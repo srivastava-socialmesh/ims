@@ -42,7 +42,8 @@ export function useAreas() {
         .in('role', ['admin', 'manager'])
         .order('full_name');
       if (error) throw error;
-      setManagers(data || []);
+      // Cast to any because we only need these fields for the dropdown
+      setManagers(data as any || []);
     } catch (err: any) {
       setError(err.message);
     }
