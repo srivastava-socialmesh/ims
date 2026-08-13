@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-  },
+  swcMinify: false, // Required for Termux / Android (no SWC binary)
 };
 
 module.exports = nextConfig;
