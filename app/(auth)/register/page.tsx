@@ -17,25 +17,49 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          company_name: companyName,
-        },
-      },
-    });
-    if (error) {
-      setError(error.message);
-    } else {
-      alert('Registration successful! Please check your email to confirm.');
-      router.push('/login');
+    setLoading(true);
+
+    // Trim inputs
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    const trimmedFullName = fullName.trim();
+    const trimmedCompany = companyName.trim();
+
+    // Basic validation
+    if (!trimmedEmail || !trimmedPassword || !trimmedFullName || !trimmedCompany) {
+      setError('All fields are required.');
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: trimmedEmail,
+        password: trimmedPassword,
+        options: {
+          data: {
+            full_name: trimmedFullName,
+            company_name: trimmedCompany,
+          },
+        },
+      });
+
+      if (error) {
+        // Show a more descriptive error
+        setError(error.message);
+        console.error('Signup error:', error);
+      } else {
+        // Success – email confirmation may be required
+        alert('Registration successful! Please check your email to confirm.');
+        router.push('/login');
+      }
+    } catch (err: any) {
+      setError('An unexpected error occurred. Please try again.');
+      console.error('Unexpected error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -84,7 +108,11 @@ export default function RegisterPage() {
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && (
+            <div className="text-red-600 text-sm bg-red-50 p-2 rounded-lg border border-red-200">
+              {error}
+            </div>
+          )}
           <button
             type="submit"
             disabled={loading}
