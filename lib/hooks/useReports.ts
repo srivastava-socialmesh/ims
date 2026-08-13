@@ -45,26 +45,25 @@ export function useReports() {
       if (movErr) throw movErr;
       setTotalMovements30d(movCount || 0);
 
-      // 4. Low stock items: fetch stock with item and area, then filter in JS
+      // 4. Low stock items: fetch all stock with item details, filter client-side
       const { data: stockData, error: stockErr } = await supabase
         .from('stock')
         .select(`
-          id,
           quantity,
-          item:items(id, name, sku, reorder_level),
-          area:areas(name)
+          items ( id, name, sku, reorder_level ),
+          areas ( name )
         `);
       if (stockErr) throw stockErr;
-      const lowItems = stockData
-        ?.filter((s: any) => s.item && s.quantity < s.item.reorder_level)
+      const lowItems = (stockData || [])
+        .filter((s: any) => s.items && s.quantity < s.items.reorder_level)
         .map((s: any) => ({
-          item_id: s.item.id,
-          item_name: s.item.name,
-          sku: s.item.sku,
-          area_name: s.area?.name || 'Unknown',
+          item_id: s.items.id,
+          item_name: s.items.name,
+          sku: s.items.sku,
+          area_name: s.areas?.name || 'Unknown',
           quantity: s.quantity,
-          reorder_level: s.item.reorder_level,
-        })) || [];
+          reorder_level: s.items.reorder_level,
+        }));
       setLowStockItems(lowItems);
 
       // 5. Movement trend: last 7 days
@@ -74,7 +73,6 @@ export function useReports() {
         .select('created_at')
         .gte('created_at', sevenDaysAgo);
       if (trendErr) throw trendErr;
-      
       const dateCounts: Record<string, number> = {};
       trendData?.forEach((m: any) => {
         const d = format(new Date(m.created_at), 'yyyy-MM-dd');
@@ -88,16 +86,16 @@ export function useReports() {
       setMovementTrend(trend);
 
       // 6. Stock by area
-      const { data: stockAreaData, error: areaErr } = await supabase
+      const { data: areaData, error: areaErr } = await supabase
         .from('stock')
         .select(`
-          area:areas(name),
+          areas ( name ),
           quantity
         `);
       if (areaErr) throw areaErr;
       const areaMap: Record<string, number> = {};
-      stockAreaData?.forEach((s: any) => {
-        const name = s.area?.name || 'Unknown';
+      areaData?.forEach((s: any) => {
+        const name = s.areas?.name || 'Unknown';
         areaMap[name] = (areaMap[name] || 0) + s.quantity;
       });
       const areaStockData = Object.entries(areaMap).map(([name, total]) => ({
