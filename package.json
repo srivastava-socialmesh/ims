@@ -1,30 +1,33 @@
 {
-  "name": "ims",
-  "version": "1.0.0",
-  "description": "",
-  "main": "next.config.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "name": "my-inventory-app",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "@supabase/ssr": "^0.12.4",
-    "@supabase/supabase-js": "^2.112.3",
-    "autoprefixer": "^10.5.4",
-    "date-fns": "^4.4.0",
-    "lucide-react": "^1.31.0",
-    "next": "^16.3.0",
-    "postcss": "^8.5.26",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "recharts": "^3.10.1",
-    "tailwindcss": "^4.3.3",
-    "zod": "^4.4.3"
+    "@supabase/ssr": "^0.5.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "autoprefixer": "^10.4.20",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.460.0",
+    "next": "14.2.5",
+    "postcss": "^8.4.45",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.12.7",
+    "tailwindcss": "^3.4.10",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "@types/react": "^18.3.4",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.5",
+    "typescript": "^5.5.4"
   }
 }
