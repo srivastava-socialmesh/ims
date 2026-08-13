@@ -31,8 +31,8 @@ export default function MovementForm({ onSubmit }: MovementFormProps) {
         supabase.from('items').select('id, name, sku, unit_of_measure').order('name'),
         supabase.from('areas').select('id, name, type').order('name'),
       ]);
-      if (itemsRes.data) setItems(itemsRes.data);
-      if (areasRes.data) setAreas(areasRes.data);
+      if (itemsRes.data) setItems(itemsRes.data as any);
+      if (areasRes.data) setAreas(areasRes.data as any);
     };
     fetchData();
   }, []);
@@ -58,7 +58,6 @@ export default function MovementForm({ onSubmit }: MovementFormProps) {
     }
   };
 
-  // Show/hide appropriate fields based on movement type
   const isReceipt = formData.movement_type === 'receipt';
   const isIssue = formData.movement_type === 'issue';
   const isTransfer = formData.movement_type === 'transfer';
@@ -115,7 +114,6 @@ export default function MovementForm({ onSubmit }: MovementFormProps) {
         />
       </div>
 
-      {/* Conditional area fields */}
       {(isReceipt || isTransfer || isAdjustment) && (
         <div>
           <label className="block text-sm font-medium text-gray-700">
