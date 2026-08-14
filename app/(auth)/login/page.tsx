@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -44,6 +45,11 @@ export default function LoginPage() {
     >
       <div className="w-full max-w-sm">
         <div className="bg-white/90 rounded-2xl p-6 shadow-xl">
+          {/* Logo */}
+          <div className="flex justify-center mb-5">
+            <Logo />
+          </div>
+
           <div className="text-center mb-5">
             <h2 className="text-2xl font-bold text-gray-800">Welcome Back</h2>
             <p className="text-gray-500 text-sm mt-1">Sign in to your IMS account</p>

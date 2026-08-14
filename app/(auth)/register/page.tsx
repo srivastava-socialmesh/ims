@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock, User, Building2 } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -53,6 +54,11 @@ export default function RegisterPage() {
     >
       <div className="w-full max-w-sm">
         <div className="bg-white/90 rounded-2xl p-6 shadow-xl">
+          {/* Logo */}
+          <div className="flex justify-center mb-5">
+            <Logo />
+          </div>
+
           <div className="text-center mb-5">
             <h2 className="text-2xl font-bold text-gray-800">Create Account</h2>
             <p className="text-gray-500 text-sm mt-1">Start your IMS free trial</p>
