@@ -9,6 +9,7 @@ export interface UserWithAuth extends Profile {
     last_sign_in_at: string | null;
     confirmed_at: string | null;
   };
+  status: string; // Make status required
 }
 
 export function useUsers() {
@@ -36,14 +37,20 @@ export function useUsers() {
       const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
 
       if (authError) {
-        // If we can't get auth users (might be permission issue), still show profiles
-        setUsers(profiles || []);
+        // If we can't get auth users, still show profiles with default values
+        const merged = (profiles || []).map((profile: any) => ({
+          ...profile,
+          status: profile.status || 'active',
+          auth_user: null,
+        }));
+        setUsers(merged);
       } else {
         // Merge profile data with auth data
         const merged = (profiles || []).map((profile: any) => {
           const authUser = authUsers.users.find((u: any) => u.id === profile.id);
           return {
             ...profile,
+            status: profile.status || 'active',
             auth_user: authUser ? {
               email: authUser.email,
               last_sign_in_at: authUser.last_sign_in_at,
@@ -88,21 +95,38 @@ export function useUsers() {
         throw new Error('User already exists in this organization');
       }
 
-      // Invite the user via Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.admin.inviteUserByEmail(email, {
-        data: {
+      // Create the user in auth and profile
+      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email,
+        email_confirm: true,
+        user_metadata: {
           full_name: fullName,
           role: role,
           organization_id: orgId,
           invited_by: currentUser?.id,
           invited_at: new Date().toISOString(),
-          status: 'invited',
+          status: 'active',
         },
       });
 
       if (authError) throw authError;
 
-      // Fetch updated users list
+      // Create the profile
+      if (authData.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: authData.user.id,
+            full_name: fullName,
+            role: role,
+            organization_id: orgId,
+            status: 'active',
+            invited_by: currentUser?.id,
+            invited_at: new Date().toISOString(),
+          });
+        if (profileError) throw profileError;
+      }
+
       await fetchUsers();
       return authData;
 
@@ -141,13 +165,6 @@ export function useUsers() {
         .eq('organization_id', orgId);
 
       if (error) throw error;
-
-      // If status is 'active', update the auth user's confirmed_at
-      if (status === 'active') {
-        // Note: This is a simplified approach. In production, you might want to 
-        // use a more sophisticated user management flow.
-      }
-
       await fetchUsers();
     } catch (err: any) {
       setError(err.message);
@@ -173,9 +190,6 @@ export function useUsers() {
         .eq('organization_id', orgId);
 
       if (error) throw error;
-
-      // Optional: Also remove or disable the auth user
-      // This requires admin privileges
       await fetchUsers();
     } catch (err: any) {
       setError(err.message);
