@@ -55,7 +55,7 @@ export default function RegisterPage() {
         <div className="bg-white/90 rounded-2xl p-6 shadow-xl">
           <div className="text-center mb-5">
             <h2 className="text-2xl font-bold text-gray-800">Create Account</h2>
-            <p className="text-gray-500 text-sm mt-1">Start your free trial</p>
+            <p className="text-gray-500 text-sm mt-1">Start your IMS free trial</p>
           </div>
 
           <form onSubmit={handleRegister} className="space-y-3">

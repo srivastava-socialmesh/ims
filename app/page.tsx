@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Zap, Shield, Users, Globe } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, Shield, Users, Globe, BarChart } from 'lucide-react';
 
 export default async function HomePage() {
   const supabase = createClient();
@@ -12,100 +12,104 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden relative">
-      {/* Decorative blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl animate-[pulse_6s_ease-in-out_infinite]" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-indigo-200/30 to-pink-200/30 rounded-full blur-3xl animate-[pulse_6s_ease-in-out_infinite_1s]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-200/10 to-teal-200/10 rounded-full blur-3xl animate-[spin_20s_linear_infinite]" />
-      </div>
+    <div 
+      className="min-h-screen flex flex-col relative"
+      style={{
+        backgroundImage: `url('https://nbkiydajwrirmbomwsot.supabase.co/storage/v1/object/sign/background/6298.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMzVhY2MxYi1kOWM4LTRjZTYtOTdlYS0wNWQzMmQ5N2ViY2IiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJiYWNrZ3JvdW5kLzYyOTgucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjY5NDA0NSwiZXhwIjoxODE4MjMwMDQ1fQ.Sp1B8yXzvn0X1qmomHZapFv80WNqqk-QQeAzQazAGCw')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Subtle overlay for readability */}
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-[1px]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-20">
-          <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            InvMS
+      <div className="relative z-10 flex-1 flex flex-col">
+        {/* Header - compact */}
+        <header className="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            IMS
           </div>
-          <div className="flex gap-4">
-            <Link href="/login" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
+          <div className="flex gap-2 sm:gap-3">
+            <Link
+              href="/login"
+              className="px-3 sm:px-5 py-1.5 sm:py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors bg-white/60 backdrop-blur-sm rounded-full hover:bg-white/80"
+            >
               Sign In
             </Link>
-            <Link href="/register" className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full hover:shadow-lg transition-all hover:scale-105">
+            <Link
+              href="/register"
+              className="px-3 sm:px-5 py-1.5 sm:py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full hover:shadow-lg transition-all hover:scale-105"
+            >
               Get Started
             </Link>
           </div>
         </header>
 
-        {/* Hero */}
-        <div className="text-center max-w-3xl mx-auto mb-24">
-          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-1 text-sm text-blue-700 mb-6">
-            <Sparkles className="w-4 h-4" />
-            <span>Next‑gen inventory for modern teams</span>
-          </div>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Smart Inventory
-            </span>
-            <br />
-            <span className="text-gray-800">for Metal & Construction</span>
-          </h1>
-          <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto">
-            Track materials, manage sites, and automate stock movements – all in one beautiful platform.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register" className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2 justify-center">
-              Start Free Trial
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link href="#features" className="px-8 py-3 bg-white border border-gray-200 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all hover:border-blue-300">
-              Learn More
-            </Link>
-          </div>
-        </div>
-
-        {/* Features */}
-        <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
-          {[
-            { icon: Zap, title: 'Real‑time Stock', desc: 'Instant updates as materials move across your sites.' },
-            { icon: Shield, title: 'Multi‑Tenant', desc: 'Secure isolation for each client organization.' },
-            { icon: Users, title: 'Team Roles', desc: 'Admin, manager, worker – control access granularly.' },
-            { icon: Globe, title: 'Anywhere Access', desc: 'Cloud‑based, works on desktop, tablet, and mobile.' },
-          ].map((feature, i) => {
-            const Icon = feature.icon;
-            return (
-              <div
-                key={i}
-                className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all hover:-translate-y-1 group"
+        {/* Main content - compact with less spacing */}
+        <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+          <div className="text-center max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 bg-blue-50/80 backdrop-blur-sm border border-blue-200 rounded-full px-3 sm:px-4 py-1 text-xs sm:text-sm text-blue-700 mb-4 sm:mb-6">
+              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span>Next‑gen inventory for modern teams</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Smart Inventory
+              </span>
+              <br />
+              <span className="text-gray-800">for Fabrication & Construction</span>
+            </h1>
+            <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-700 max-w-2xl mx-auto bg-white/40 backdrop-blur-sm p-3 sm:p-4 rounded-2xl">
+              Track materials, manage sites, and automate stock movements – all in one beautiful platform.
+            </p>
+            <div className="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <Link
+                href="/register"
+                className="px-6 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2 justify-center text-sm sm:text-base"
               >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Icon className="w-6 h-6 text-blue-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800">{feature.title}</h3>
-                <p className="text-gray-600 text-sm mt-2">{feature.desc}</p>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* CTA */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 lg:p-12 shadow-xl border border-white/20 text-center">
-          <h2 className="text-3xl font-bold text-gray-800">Ready to streamline your inventory?</h2>
-          <p className="text-gray-600 mt-2 max-w-xl mx-auto">
-            Join hundreds of teams already using InvMS to save time and reduce waste.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-4 justify-center">
-            <Link href="/register" className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105">
-              Create Free Account
-            </Link>
-            <Link href="/login" className="px-8 py-3 bg-white border border-gray-200 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all">
-              Sign In
-            </Link>
+                Start Free Trial
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Link>
+              <Link
+                href="#features"
+                className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white/70 backdrop-blur-sm border border-gray-200 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all hover:border-blue-300 text-sm sm:text-base"
+              >
+                Learn More
+              </Link>
+            </div>
           </div>
-        </div>
+
+          {/* Features - compact grid */}
+          <div id="features" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-12 w-full max-w-5xl">
+            {[
+              { icon: Zap, title: 'Real‑time Stock', desc: 'Instant updates as materials move across your sites.' },
+              { icon: Shield, title: 'Multi‑Tenant', desc: 'Secure isolation for each client organization.' },
+              { icon: Users, title: 'Team Roles', desc: 'Admin, manager, worker – control access granularly.' },
+              { icon: Globe, title: 'Anywhere Access', desc: 'Cloud‑based, works on desktop, tablet, and mobile.' },
+            ].map((feature, i) => {
+              const Icon = feature.icon;
+              return (
+                <div
+                  key={i}
+                  className="bg-white/60 backdrop-blur-sm rounded-xl p-4 sm:p-5 shadow-md border border-white/40 hover:shadow-xl transition-all hover:-translate-y-1 group"
+                >
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-2 sm:mb-3 group-hover:scale-110 transition-transform">
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">{feature.title}</h3>
+                  <p className="text-gray-600 text-xs sm:text-sm mt-1">{feature.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </main>
 
         {/* Footer */}
-        <footer className="mt-20 text-center text-sm text-gray-500 border-t border-gray-200/50 pt-8">
-          <p>© {new Date().getFullYear()} InvMS – Built for metal fabrication & construction.</p>
+        <footer className="relative z-10 border-t border-gray-200/50 bg-white/30 backdrop-blur-sm py-3 sm:py-4 px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-xs sm:text-sm text-gray-600">
+            © {new Date().getFullYear()} IMS – Built for business running fabrication & construction domain Powered by AeroDesk Global
+          </p>
         </footer>
       </div>
     </div>

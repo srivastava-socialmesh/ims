@@ -81,18 +81,15 @@ export default function DashboardLayout({
 
   const currentPage = navItems.find(item => pathname === item.href || pathname.startsWith(item.href + '/'))?.name || 'Dashboard';
 
-  // Compute margin-left for main content based on sidebar state
   const contentMarginLeft = sidebarOpen ? 'ml-0' : (sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64');
 
   return (
     <OrganizationProvider>
       <div className="flex h-screen bg-gray-50">
-        {/* Mobile overlay */}
         {sidebarOpen && (
           <div className="fixed inset-0 bg-black/20 z-40 lg:hidden" onClick={closeMobile} />
         )}
 
-        {/* Sidebar */}
         <aside
           className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 shadow-xl transition-all duration-300 ease-in-out ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
@@ -100,10 +97,14 @@ export default function DashboardLayout({
         >
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             {!sidebarCollapsed && (
-              <div className="text-2xl font-bold text-blue-600">InvMS</div>
+              <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                IMS
+              </div>
             )}
             {sidebarCollapsed && (
-              <div className="text-2xl font-bold text-blue-600">I</div>
+              <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                I
+              </div>
             )}
             <button
               onClick={toggleSidebar}
@@ -136,14 +137,10 @@ export default function DashboardLayout({
             })}
           </nav>
 
-          <div className="p-4 border-t border-gray-200">
-            {/* empty spacer */}
-          </div>
+          <div className="p-4 border-t border-gray-200" />
         </aside>
 
-        {/* Main content area with dynamic left margin */}
         <main className={`flex-1 flex flex-col min-w-0 overflow-hidden transition-all duration-300 ${contentMarginLeft}`}>
-          {/* Header */}
           <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 p-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
@@ -155,13 +152,12 @@ export default function DashboardLayout({
               <h1 className="text-xl font-semibold text-gray-800">{currentPage}</h1>
             </div>
 
-            {/* User menu */}
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center font-semibold">
                   {user?.email?.[0]?.toUpperCase() || 'U'}
                 </div>
                 <ChevronDown size={16} className="text-gray-500" />

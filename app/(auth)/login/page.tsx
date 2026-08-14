@@ -46,7 +46,7 @@ export default function LoginPage() {
         <div className="bg-white/90 rounded-2xl p-6 shadow-xl">
           <div className="text-center mb-5">
             <h2 className="text-2xl font-bold text-gray-800">Welcome Back</h2>
-            <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
+            <p className="text-gray-500 text-sm mt-1">Sign in to your IMS account</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">

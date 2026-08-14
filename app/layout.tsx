@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Inventory Management System',
-  description: 'Built for metal fabrication & construction',
+  title: 'IMS - Inventory Management System',
+  description: 'Smart inventory for fabrication & construction',
 };
 
 export default function RootLayout({
