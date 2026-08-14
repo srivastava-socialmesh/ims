@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Mail, Lock, User, Building2, ArrowRight, Sparkles } from 'lucide-react';
+import { User, Mail, Lock, Building2, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -20,7 +20,6 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
     const trimmedFullName = fullName.trim();
@@ -32,42 +31,49 @@ export default function RegisterPage() {
       return;
     }
 
-    const { error } = await supabase.auth.signUp({
-      email: trimmedEmail,
-      password: trimmedPassword,
-      options: {
-        data: {
-          full_name: trimmedFullName,
-          company_name: trimmedCompany,
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: trimmedEmail,
+        password: trimmedPassword,
+        options: {
+          data: {
+            full_name: trimmedFullName,
+            company_name: trimmedCompany,
+          },
         },
-      },
-    });
+      });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      alert('Registration successful! Please check your email to confirm.');
-      router.push('/login');
+      if (error) {
+        setError(error.message);
+        console.error('Signup error:', error);
+      } else {
+        alert('Registration successful! Please check your email to confirm.');
+        router.push('/login');
+      }
+    } catch (err: any) {
+      setError('An unexpected error occurred. Please try again.');
+      console.error('Unexpected error:', err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 relative overflow-hidden">
-      {/* Decorative shapes */}
+      {/* Decorative blobs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-indigo-200/30 to-pink-200/30 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-cyan-200/10 to-teal-200/10 rounded-full blur-3xl animate-spin-slow" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl animate-[pulse_6s_ease-in-out_infinite]" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-indigo-200/30 to-pink-200/30 rounded-full blur-3xl animate-[pulse_6s_ease-in-out_infinite_1s]" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
         <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 md:p-10">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg mb-4">
-              <Sparkles className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-1 text-sm text-blue-700 mb-4">
+              <Sparkles className="w-4 h-4" />
+              <span>Get started</span>
             </div>
-            <h1 className="text-3xl font-bold text-gray-800">Create Account</h1>
+            <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
             <p className="text-gray-500 mt-1">Start your free trial today</p>
           </div>
 
@@ -80,9 +86,9 @@ export default function RegisterPage() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition bg-white/50 backdrop-blur-sm"
+                  className="w-full pl-10 pr-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                   placeholder="John Doe"
+                  required
                 />
               </div>
             </div>
@@ -95,9 +101,9 @@ export default function RegisterPage() {
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  placeholder="Acme Inc."
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition bg-white/50 backdrop-blur-sm"
-                  placeholder="Acme Corp"
                 />
               </div>
             </div>
@@ -110,9 +116,9 @@ export default function RegisterPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition bg-white/50 backdrop-blur-sm"
+                  className="w-full pl-10 pr-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                   placeholder="you@example.com"
+                  required
                 />
               </div>
             </div>
@@ -125,16 +131,16 @@ export default function RegisterPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  placeholder="•••••••• (min 6 chars)"
                   required
                   minLength={6}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition bg-white/50 backdrop-blur-sm"
-                  placeholder="••••••••"
                 />
               </div>
             </div>
 
             {error && (
-              <div className="text-red-600 text-sm bg-red-50/80 backdrop-blur-sm p-3 rounded-xl border border-red-200">
+              <div className="text-red-600 text-sm bg-red-50 p-3 rounded-xl border border-red-200">
                 {error}
               </div>
             )}
@@ -142,14 +148,14 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-xl hover:shadow-lg transition-all hover:scale-[1.02] disabled:opacity-50 flex items-center justify-center gap-2 group"
+              className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-[1.02] disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {loading ? 'Creating...' : 'Get Started'}
-              {!loading && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+              {loading ? 'Creating...' : 'Create Account'}
+              <ArrowRight className="w-5 h-5" />
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-600 mt-6">
+          <p className="text-sm text-center mt-6 text-gray-600">
             Already have an account?{' '}
             <Link href="/login" className="text-blue-600 hover:underline font-medium">
               Sign In

@@ -13,11 +13,11 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden relative">
-      {/* Floating decorative shapes */}
+      {/* Decorative blobs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-indigo-200/30 to-pink-200/30 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-200/10 to-teal-200/10 rounded-full blur-3xl animate-spin-slow" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl animate-[pulse_6s_ease-in-out_infinite]" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-indigo-200/30 to-pink-200/30 rounded-full blur-3xl animate-[pulse_6s_ease-in-out_infinite_1s]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-200/10 to-teal-200/10 rounded-full blur-3xl animate-[spin_20s_linear_infinite]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
@@ -27,16 +27,10 @@ export default async function HomePage() {
             InvMS
           </div>
           <div className="flex gap-4">
-            <Link
-              href="/login"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-            >
+            <Link href="/login" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
               Sign In
             </Link>
-            <Link
-              href="/register"
-              className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full hover:shadow-lg transition-all hover:scale-105"
-            >
+            <Link href="/register" className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full hover:shadow-lg transition-all hover:scale-105">
               Get Started
             </Link>
           </div>
@@ -59,17 +53,11 @@ export default async function HomePage() {
             Track materials, manage sites, and automate stock movements – all in one beautiful platform.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/register"
-              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2 justify-center"
-            >
+            <Link href="/register" className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2 justify-center">
               Start Free Trial
               <ArrowRight className="w-5 h-5" />
             </Link>
-            <Link
-              href="#features"
-              className="px-8 py-3 bg-white border border-gray-200 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all hover:border-blue-300"
-            >
+            <Link href="#features" className="px-8 py-3 bg-white border border-gray-200 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all hover:border-blue-300">
               Learn More
             </Link>
           </div>
@@ -99,23 +87,17 @@ export default async function HomePage() {
           })}
         </div>
 
-        {/* Stats / CTA */}
+        {/* CTA */}
         <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 lg:p-12 shadow-xl border border-white/20 text-center">
           <h2 className="text-3xl font-bold text-gray-800">Ready to streamline your inventory?</h2>
           <p className="text-gray-600 mt-2 max-w-xl mx-auto">
             Join hundreds of teams already using InvMS to save time and reduce waste.
           </p>
           <div className="mt-6 flex flex-wrap gap-4 justify-center">
-            <Link
-              href="/register"
-              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105"
-            >
+            <Link href="/register" className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105">
               Create Free Account
             </Link>
-            <Link
-              href="/login"
-              className="px-8 py-3 bg-white border border-gray-200 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all"
-            >
+            <Link href="/login" className="px-8 py-3 bg-white border border-gray-200 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all">
               Sign In
             </Link>
           </div>
@@ -126,5 +108,6 @@ export default async function HomePage() {
           <p>© {new Date().getFullYear()} InvMS – Built for metal fabrication & construction.</p>
         </footer>
       </div>
+    </div>
   );
 }
