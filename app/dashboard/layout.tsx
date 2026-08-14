@@ -19,6 +19,7 @@ import {
   ChevronLeft,
   User,
   ChevronDown,
+  Users,
 } from 'lucide-react';
 import { OrganizationProvider } from '@/lib/context/OrganizationContext';
 
@@ -174,12 +175,12 @@ export default function DashboardLayout({
                     Profile
                   </Link>
                   <Link
-                    href="/dashboard/settings/profile"
+                    href="/dashboard/settings/users"
                     className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                     onClick={() => setUserMenuOpen(false)}
                   >
-                    <Settings size={16} />
-                    Settings
+                    <Users size={16} />
+                    User Management
                   </Link>
                   <hr className="my-1" />
                   <button
