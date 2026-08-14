@@ -16,11 +16,11 @@ export default function AreasPage() {
   );
 
   const handleDelete = async (id: string) => {
-    if (confirm('Delete this area? This will also remove stock records. Continue?')) {
+    if (confirm('Delete this site/location? This will also remove stock records. Continue?')) {
       try {
         await deleteArea(id);
       } catch (err) {
-        alert('Failed to delete area');
+        alert('Failed to delete site/location');
       }
     }
   };
@@ -28,13 +28,13 @@ export default function AreasPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Areas</h1>
+        <h1 className="text-2xl font-bold">Site / Location</h1>
         <Link
           href="/dashboard/areas/new"
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
         >
           <Plus size={20} />
-          Add Area
+          Add Site/Location
         </Link>
       </div>
 
@@ -56,7 +56,7 @@ export default function AreasPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAreas.length === 0 ? (
-            <div className="col-span-full text-center text-gray-500">No areas found</div>
+            <div className="col-span-full text-center text-gray-500">No sites/locations found</div>
           ) : (
             filteredAreas.map((area) => {
               const areaWithManager = area as any;

@@ -37,7 +37,7 @@ export default function AreaForm({ initialData, managers, onSubmit, isEditing }:
     try {
       await onSubmit(formData);
     } catch (err: any) {
-      setError(err.message || 'Failed to save area');
+      setError(err.message || 'Failed to save site/location');
     } finally {
       setLoading(false);
     }

@@ -27,7 +27,7 @@ const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Inventory', href: '/dashboard/inventory', icon: Package },
   { name: 'Categories', href: '/dashboard/inventory/categories', icon: FolderTree },
-  { name: 'Areas', href: '/dashboard/areas', icon: MapPin },
+  { name: 'Site/Location', href: '/dashboard/areas', icon: MapPin },
   { name: 'Movements', href: '/dashboard/movements', icon: MoveRight },
   { name: 'Orders', href: '/dashboard/orders', icon: ClipboardList },
   { name: 'Reports', href: '/dashboard/reports', icon: BarChart3 },

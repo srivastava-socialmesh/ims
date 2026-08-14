@@ -39,7 +39,6 @@ export default function EditAreaPage() {
           `)
           .eq('area_id', id);
         if (error) throw error;
-        // Supabase returns the joined relation as an array – pick the first
         const mapped = (data || []).map((s: any) => ({
           ...s,
           item: s.items?.[0] || null,
@@ -60,11 +59,11 @@ export default function EditAreaPage() {
   };
 
   if (loading) return <div>Loading...</div>;
-  if (!area) return <div>Area not found</div>;
+  if (!area) return <div>Site/Location not found</div>;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Edit Area: {area.name}</h1>
+      <h1 className="text-2xl font-bold mb-6">Edit Site/Location: {area.name}</h1>
 
       <AreaForm
         initialData={area}
@@ -75,11 +74,11 @@ export default function EditAreaPage() {
 
       {/* Stock in this area */}
       <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">Stock in this Area</h2>
+        <h2 className="text-xl font-semibold mb-4">Stock at this Site/Location</h2>
         {stockLoading ? (
           <div>Loading stock...</div>
         ) : stock.length === 0 ? (
-          <div className="bg-white p-4 rounded shadow text-gray-500">No stock records for this area</div>
+          <div className="bg-white p-4 rounded shadow text-gray-500">No stock records for this site/location</div>
         ) : (
           <div className="bg-white rounded-lg shadow overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">

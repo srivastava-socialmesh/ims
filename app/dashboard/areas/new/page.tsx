@@ -15,7 +15,7 @@ export default function NewAreaPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Add New Area</h1>
+      <h1 className="text-2xl font-bold mb-6">Add New Site/Location</h1>
       <AreaForm managers={managers} onSubmit={handleSubmit} />
     </div>
   );
