@@ -8,18 +8,7 @@ module.exports = {
     extend: {
       animation: {
         'spin-slow': 'spin 20s linear infinite',
-        'pulse-slow': 'pulse 6s ease-in-out infinite',
-        'pulse-delayed': 'pulse 6s ease-in-out infinite 1s',
-      },
-      keyframes: {
-        spin: {
-          from: { transform: 'rotate(0deg)' },
-          to: { transform: 'rotate(360deg)' },
-        },
-        pulse: {
-          '0%, 100%': { opacity: 0.3 },
-          '50%': { opacity: 0.7 },
-        },
+        'pulse': 'pulse 6s ease-in-out infinite',
       },
     },
   },
