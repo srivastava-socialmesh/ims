@@ -30,6 +30,7 @@ const navItems = [
   { name: 'Movements', href: '/dashboard/movements', icon: MoveRight },
   { name: 'Orders', href: '/dashboard/orders', icon: ClipboardList },
   { name: 'Reports', href: '/dashboard/reports', icon: BarChart3 },
+  { name: 'Users', href: '/dashboard/settings/users', icon: Users },
 ];
 
 export default function DashboardLayout({
