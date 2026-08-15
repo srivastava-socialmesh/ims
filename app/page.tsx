@@ -12,7 +12,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col relative"
       style={{
         backgroundImage: `url('https://nbkiydajwrirmbomwsot.supabase.co/storage/v1/object/sign/background/1000976392.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMzVhY2MxYi1kOWM4LTRjZTYtOTdlYS0wNWQzMmQ5N2ViY2IiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJiYWNrZ3JvdW5kLzEwMDA5NzYzOTIucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4Njc5NzMzMSwiZXhwIjoxODE4MzMzMzMxfQ.UcIFRQt2Bp2powgr5TkeVP0ROeolsUcjtXY3MVZmp8o')`,
@@ -59,11 +59,11 @@ export default async function HomePage() {
                 Smart Inventory
               </span>
               <br />
-              <span className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-800 drop-shadow-sm">
+              <span className="text-xl sm:text-2xl lg:text-3xl font-medium text-gray-700 drop-shadow-sm">
                 for Small and Medium Businesses
               </span>
             </h1>
-            <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-700 max-w-2xl mx-auto bg-white/60 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-sm border border-white/30">
+            <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto bg-white/60 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-sm border border-white/30">
               Track materials, manage sites, and automate stock movements – all in one beautiful platform.
             </p>
             <div className="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
@@ -97,11 +97,11 @@ export default async function HomePage() {
                   key={i}
                   className="bg-white/70 backdrop-blur-sm rounded-xl p-4 sm:p-5 shadow-lg border border-white/40 hover:shadow-xl transition-all hover:-translate-y-1 group"
                 >
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-2 sm:mb-3 group-hover:scale-110 transition-transform">
-                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform mx-auto shadow-md">
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">{feature.title}</h3>
-                  <p className="text-gray-600 text-xs sm:text-sm mt-1">{feature.desc}</p>
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-800 text-center">{feature.title}</h3>
+                  <p className="text-gray-600 text-xs sm:text-sm mt-1.5 text-center leading-relaxed">{feature.desc}</p>
                 </div>
               );
             })}
