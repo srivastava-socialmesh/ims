@@ -15,7 +15,7 @@ export default async function HomePage() {
     <div 
       className="min-h-screen flex flex-col relative"
       style={{
-        backgroundImage: `url('https://nbkiydajwrirmbomwsot.supabase.co/storage/v1/object/sign/background/6298.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMzVhY2MxYi1kOWM4LTRjZTYtOTdlYS0wNWQzMmQ5N2ViY2IiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJiYWNrZ3JvdW5kLzYyOTgucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjY5NDA0NSwiZXhwIjoxODE4MjMwMDQ1fQ.Sp1B8yXzvn0X1qmomHZapFv80WNqqk-QQeAzQazAGCw')`,
+        backgroundImage: `url('https://nbkiydajwrirmbomwsot.supabase.co/storage/v1/object/sign/background/1000976380.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMzVhY2MxYi1kOWM4LTRjZTYtOTdlYS0wNWQzMmQ5N2ViY2IiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJiYWNrZ3JvdW5kLzEwMDA5NzYzODAucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4Njc3NjMzMywiZXhwIjoxODE4MzEyMzMzfQ.er977RbEVmWXC0K3BRlbtbIS70apjAnWzQS9bSoquC0')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
@@ -58,7 +58,7 @@ export default async function HomePage() {
                 Smart Inventory
               </span>
               <br />
-              <span className="text-gray-800">for Small and Medium Business</span>
+              <span className="text-gray-800">for Small and Medium Businesses</span>
             </h1>
             <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-700 max-w-2xl mx-auto bg-white/40 backdrop-blur-sm p-3 sm:p-4 rounded-2xl">
               Track materials, manage sites, and automate stock movements – all in one beautiful platform.
