@@ -22,7 +22,7 @@ export default async function HomePage() {
         backgroundAttachment: 'fixed',
       }}
     >
-      {/* Light overlay with less opacity for better background visibility */}
+      {/* Light overlay for readability */}
       <div className="absolute inset-0 bg-white/10 backdrop-blur-[0.5px]" />
 
       <div className="relative z-10 flex-1 flex flex-col">
@@ -48,9 +48,9 @@ export default async function HomePage() {
         </header>
 
         {/* Main content */}
-        <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-white/30 rounded-full px-3 sm:px-4 py-1 text-xs sm:text-sm text-blue-700 mb-4 sm:mb-6 shadow-sm">
+        <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-white/30 rounded-full px-3 sm:px-4 py-1 text-xs sm:text-sm text-blue-700 mb-4 sm:mb-5 shadow-sm">
               <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="font-medium">Next‑gen inventory for modern teams</span>
             </div>
@@ -66,17 +66,17 @@ export default async function HomePage() {
             <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto bg-white/60 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-sm border border-white/30">
               Track materials, manage sites, and automate stock movements – all in one beautiful platform.
             </p>
-            <div className="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
               <Link
                 href="/register"
-                className="px-6 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2 justify-center text-sm sm:text-base shadow-lg"
+                className="px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-medium hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2 justify-center text-sm shadow-lg"
               >
                 Start Free Trial
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="#features"
-                className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all hover:border-blue-300 text-sm sm:text-base"
+                className="px-4 sm:px-6 py-2 sm:py-2.5 bg-white/80 backdrop-blur-sm border border-gray-200/50 text-gray-700 rounded-full font-medium hover:shadow-lg transition-all hover:border-blue-300 text-sm"
               >
                 Learn More
               </Link>
@@ -84,7 +84,7 @@ export default async function HomePage() {
           </div>
 
           {/* Features */}
-          <div id="features" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-12 w-full max-w-5xl">
+          <div id="features" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full max-w-5xl">
             {[
               { icon: Zap, title: 'Real‑time Stock', desc: 'Instant updates as materials move across your sites.' },
               { icon: Shield, title: 'Multi‑Tenant', desc: 'Secure isolation for each client organization.' },
