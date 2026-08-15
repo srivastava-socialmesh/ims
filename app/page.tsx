@@ -16,8 +16,9 @@ export default async function HomePage() {
       className="min-h-screen flex flex-col relative"
       style={{
         backgroundImage: `url('https://nbkiydajwrirmbomwsot.supabase.co/storage/v1/object/sign/background/1000976392.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMzVhY2MxYi1kOWM4LTRjZTYtOTdlYS0wNWQzMmQ5N2ViY2IiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJiYWNrZ3JvdW5kLzEwMDA5NzYzOTIucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4Njc5NzMzMSwiZXhwIjoxODE4MzMzMzMxfQ.UcIFRQt2Bp2powgr5TkeVP0ROeolsUcjtXY3MVZmp8o')`,
-        backgroundSize: 'cover',
+        backgroundSize: 'content',
         backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed',
       }}
     >
