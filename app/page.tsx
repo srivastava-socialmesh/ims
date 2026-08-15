@@ -48,8 +48,8 @@ export default async function HomePage() {
         </header>
 
         {/* Main content */}
-        <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
+        <main className="flex-1 flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:pt-16">
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 lg:mb-20">
             <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-white/30 rounded-full px-3 sm:px-4 py-1 text-xs sm:text-sm text-blue-700 mb-4 sm:mb-5 shadow-sm">
               <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="font-medium">Next‑gen inventory for modern teams</span>
@@ -83,8 +83,8 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Features */}
-          <div id="features" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full max-w-5xl">
+          {/* Features - moved further down */}
+          <div id="features" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full max-w-5xl mt-4 sm:mt-6 lg:mt-8">
             {[
               { icon: Zap, title: 'Real‑time Stock', desc: 'Instant updates as materials move across your sites.' },
               { icon: Shield, title: 'Multi‑Tenant', desc: 'Secure isolation for each client organization.' },
@@ -109,7 +109,7 @@ export default async function HomePage() {
         </main>
 
         {/* Footer */}
-        <footer className="relative z-10 border-t border-white/30 bg-white/20 backdrop-blur-sm py-3 sm:py-4 px-4 sm:px-6 lg:px-8">
+        <footer className="relative z-10 border-t border-white/30 bg-white/20 backdrop-blur-sm py-3 sm:py-4 px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10">
           <p className="text-center text-xs sm:text-sm text-gray-700 font-medium">
             © {new Date().getFullYear()} IMS – Inventory Management System &nbsp;&nbsp;&nbsp; Powered by AeroDesk Global
           </p>
