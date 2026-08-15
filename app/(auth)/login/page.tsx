@@ -38,7 +38,7 @@ export default function LoginPage() {
     <div 
       className="min-h-screen flex items-center justify-center px-4"
       style={{
-        backgroundImage: `url('https://nbkiydajwrirmbomwsot.supabase.co/storage/v1/object/sign/background/1000976380.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMzVhY2MxYi1kOWM4LTRjZTYtOTdlYS0wNWQzMmQ5N2ViY2IiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJiYWNrZ3JvdW5kLzEwMDA5NzYzODAucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4Njc3NjMzMywiZXhwIjoxODE4MzEyMzMzfQ.er977RbEVmWXC0K3BRlbtbIS70apjAnWzQS9bSoquC0')`,
+        backgroundImage: `url('https://nbkiydajwrirmbomwsot.supabase.co/storage/v1/object/sign/background/1000976392.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMzVhY2MxYi1kOWM4LTRjZTYtOTdlYS0wNWQzMmQ5N2ViY2IiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJiYWNrZ3JvdW5kLzEwMDA5NzYzOTIucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4Njc5NzMzMSwiZXhwIjoxODE4MzMzMzMxfQ.UcIFRQt2Bp2powgr5TkeVP0ROeolsUcjtXY3MVZmp8o')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
