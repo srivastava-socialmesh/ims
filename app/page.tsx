@@ -19,7 +19,7 @@ export default async function HomePage() {
         backgroundSize: 'cover',
         backgroundPosition: 'top center',
         backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
+        backgroundAttachment: 'floating',
       }}
     >
       {/* Light overlay for readability */}
