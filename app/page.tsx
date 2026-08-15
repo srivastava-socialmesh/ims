@@ -47,7 +47,7 @@ export default async function HomePage() {
           </div>
         </header>
 
-        {/* Main content - pushed further down */}
+        {/* Main content */}
         <main className="flex-1 flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 lg:pt-36">
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 lg:mb-20">
             <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-white/30 rounded-full px-3 sm:px-4 py-1 text-xs sm:text-sm text-blue-700 mb-4 sm:mb-5 shadow-sm">
@@ -63,9 +63,11 @@ export default async function HomePage() {
                 for Small and Medium Businesses
               </span>
             </h1>
-            <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto bg-white/60 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-sm border border-white/30">
-              Track materials, manage sites, and automate stock movements – all in one beautiful platform.
-            </p>
+            <div className="flex justify-center mt-3 sm:mt-4">
+              <p className="text-sm sm:text-base text-gray-600 max-w-md mx-auto bg-white/60 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-sm border border-white/30">
+                Track materials, manage sites, and automate stock movements – all in one beautiful platform.
+              </p>
+            </div>
             <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
               <Link
                 href="/register"
