@@ -28,7 +28,7 @@ export default async function HomePage() {
       <div className="relative z-10 flex-1 flex flex-col">
         {/* Header */}
         <header className="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-          <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <div className="text-2xl sm:text-3xl font-bold text-gray-800 drop-shadow-md bg-white/40 backdrop-blur-sm px-4 py-1 rounded-full">
             IMS
           </div>
           <div className="flex gap-2 sm:gap-3">
@@ -110,9 +110,9 @@ export default async function HomePage() {
           </div>
         </main>
 
-        {/* Footer */}
-        <footer className="relative z-10 border-t border-white/30 bg-white/20 backdrop-blur-sm py-3 sm:py-4 px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10">
-          <p className="text-center text-xs sm:text-sm text-gray-700 font-medium">
+        {/* Footer - darker text and background */}
+        <footer className="relative z-10 border-t border-white/50 bg-white/40 backdrop-blur-md py-3 sm:py-4 px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 shadow-inner">
+          <p className="text-center text-xs sm:text-sm text-gray-800 font-semibold drop-shadow-sm">
             © {new Date().getFullYear()} IMS – Inventory Management System &nbsp;&nbsp;&nbsp; Powered by AeroDesk Global
           </p>
         </footer>
