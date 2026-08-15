@@ -58,7 +58,7 @@ export default async function HomePage() {
                 Smart Inventory
               </span>
               <br />
-              <span className="text-gray-800">for Small and Medium Businesses</span>
+              <span className="text-gray-800">for Small and Medium Business</span>
             </h1>
             <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-700 max-w-2xl mx-auto bg-white/40 backdrop-blur-sm p-3 sm:p-4 rounded-2xl">
               Track materials, manage sites, and automate stock movements – all in one beautiful platform.
