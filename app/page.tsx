@@ -58,7 +58,7 @@ export default async function HomePage() {
                 Smart Inventory
               </span>
               <br />
-              <span className="text-gray-800">for Fabrication & Construction</span>
+              <span className="text-gray-800">for Small and Medium Businesses</span>
             </h1>
             <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-700 max-w-2xl mx-auto bg-white/40 backdrop-blur-sm p-3 sm:p-4 rounded-2xl">
               Track materials, manage sites, and automate stock movements – all in one beautiful platform.
@@ -108,7 +108,7 @@ export default async function HomePage() {
         {/* Footer */}
         <footer className="relative z-10 border-t border-gray-200/50 bg-white/30 backdrop-blur-sm py-3 sm:py-4 px-4 sm:px-6 lg:px-8">
           <p className="text-center text-xs sm:text-sm text-gray-600">
-            © {new Date().getFullYear()} IMS – Built for business running fabrication & construction domain Powered by AeroDesk Global
+            © {new Date().getFullYear()} IMS – Inventory Management System &nbsp;&nbsp;&nbsp; Powered by AeroDesk Global
           </p>
         </footer>
       </div>
