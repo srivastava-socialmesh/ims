@@ -84,17 +84,17 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   const contentMarginLeft = sidebarOpen ? 'ml-0' : (sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64');
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/50">
       {sidebarOpen && (
-        <div className="fixed inset-0 bg-black/20 z-40 lg:hidden" onClick={closeMobile} />
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden" onClick={closeMobile} />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 shadow-xl transition-all duration-300 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-50 bg-white/80 backdrop-blur-xl border-r border-white/30 shadow-2xl transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         } ${sidebarCollapsed ? 'lg:w-20' : 'lg:w-64'} flex flex-col`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b border-white/30">
           {!sidebarCollapsed && (
             <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               IMS
@@ -107,7 +107,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
           )}
           <button
             onClick={toggleSidebar}
-            className="p-1 rounded-lg hover:bg-gray-100 text-gray-500"
+            className="p-1 rounded-lg hover:bg-white/50 text-gray-500 transition-all"
           >
             {sidebarCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
           </button>
@@ -124,8 +124,8 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                 onClick={closeMobile}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
                   isActive
-                    ? 'bg-blue-50 text-blue-700 shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-700 shadow-inner backdrop-blur-sm'
+                    : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 backdrop-blur-sm'
                 } ${sidebarCollapsed ? 'justify-center' : ''}`}
                 title={sidebarCollapsed ? item.name : ''}
               >
@@ -136,15 +136,15 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-gray-200" />
+        <div className="p-4 border-t border-white/30" />
       </aside>
 
       <main className={`flex-1 flex flex-col min-w-0 overflow-hidden transition-all duration-300 ${contentMarginLeft}`}>
-        <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 p-4 flex items-center justify-between">
+        <header className="bg-white/60 backdrop-blur-xl border-b border-white/30 p-4 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-4">
             <button
               onClick={toggleSidebar}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-white/50 transition-colors"
             >
               <Menu size={24} />
             </button>
@@ -162,15 +162,15 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
           <div className="relative">
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/50 transition-colors"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center font-semibold">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center font-semibold shadow-md">
                 {user?.email?.[0]?.toUpperCase() || 'U'}
               </div>
               <ChevronDown size={16} className="text-gray-500" />
             </button>
             {userMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-1 z-50">
+              <div className="absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur-xl rounded-xl shadow-xl border border-white/30 py-1 z-50">
                 <div className="px-4 py-2 text-xs text-gray-500 border-b border-gray-100">
                   {orgName && (
                     <div className="flex items-center gap-1.5">
@@ -182,7 +182,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                 </div>
                 <Link
                   href="/dashboard/settings/profile"
-                  className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   onClick={() => setUserMenuOpen(false)}
                 >
                   <User size={16} />
@@ -190,7 +190,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                 </Link>
                 <Link
                   href="/dashboard/settings/users"
-                  className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   onClick={() => setUserMenuOpen(false)}
                 >
                   <Users size={16} />
