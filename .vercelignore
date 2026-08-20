@@ -1,1 +1,4 @@
+# Only exclude the Edge Functions folder
 supabase/
+*.test.ts
+*.spec.ts
