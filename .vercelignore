@@ -1,4 +1,9 @@
-# Only exclude the Edge Functions folder
+# Only exclude the Edge Functions folder from Supabase (for AI features)
 supabase/
+
+# Exclude test files
 *.test.ts
 *.spec.ts
+
+# Exclude local environment files
+.env*.local
