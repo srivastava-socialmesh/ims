@@ -23,6 +23,18 @@ import {
 
 const COLORS = ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#EC4899'];
 
+// Define types for the data structures
+interface MovementTrendItem {
+  date: string;
+  count: number;
+  quantity: number;
+}
+
+interface AreaStockItem {
+  name: string;
+  value: number;
+}
+
 export default function ReportsPage() {
   const supabase = createClient();
   const { orgId } = useOrganization();
@@ -37,8 +49,8 @@ export default function ReportsPage() {
     completionRate: 0
   });
 
-  const [movementTrend, setMovementTrend] = useState([]);
-  const [areaStock, setAreaStock] = useState([]);
+  const [movementTrend, setMovementTrend] = useState<MovementTrendItem[]>([]);
+  const [areaStock, setAreaStock] = useState<AreaStockItem[]>([]);
 
   // Fetch user role
   useEffect(() => {
@@ -166,7 +178,7 @@ export default function ReportsPage() {
           trendMap[date].quantity += m.quantity || 0;
         });
         
-        const trend = Object.entries(trendMap).map(([date, data]) => ({
+        const trend: MovementTrendItem[] = Object.entries(trendMap).map(([date, data]) => ({
           date,
           count: data.count,
           quantity: data.quantity
@@ -189,7 +201,7 @@ export default function ReportsPage() {
           areaMap[name] = (areaMap[name] || 0) + (s.quantity || 0);
         });
         
-        const areaData = Object.entries(areaMap).map(([name, value]) => ({
+        const areaData: AreaStockItem[] = Object.entries(areaMap).map(([name, value]) => ({
           name,
           value
         }));
