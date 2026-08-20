@@ -1,4 +1,4 @@
-# Only exclude the Edge Functions folder from Supabase (for AI features)
+# Only exclude the Supabase Edge Functions folder
 supabase/
 
 # Exclude test files
