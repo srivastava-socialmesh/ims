@@ -56,6 +56,27 @@ export default function ReportsPage() {
     fetchUserRole();
   }, []);
 
+  // Auto-generate AI insights when orgId is available
+  useEffect(() => {
+    const generateInsights = async () => {
+      if (orgId && userRole) {
+        try {
+          const { data, error } = await supabase.functions.invoke('ai-insights', {
+            body: { orgId, userType: userRole }
+          });
+          if (error) {
+            console.error('Error generating insights:', error);
+          } else {
+            console.log('AI Insights generated:', data);
+          }
+        } catch (err) {
+          console.error('Failed to generate insights:', err);
+        }
+      }
+    };
+    generateInsights();
+  }, [orgId, userRole]);
+
   // AI insights only for admin and manager
   const showAIInsights = userRole === 'admin' || userRole === 'manager';
 
@@ -67,19 +88,7 @@ export default function ReportsPage() {
           <AIInsightsPanel userType={userRole} />
         </div>
       )}
-      // app/dashboard/reports/page.tsx (add this effect)
-useEffect(() => {
-  const generateInsights = async () => {
-    if (orgId) {
-      const { data, error } = await supabase.functions.invoke('ai-insights', {
-        body: { orgId, userType: userRole }
-      })
-      // Insights will be stored in the database automatically
-      // Refresh the page to see them
-    }
-  }
-  generateInsights()
-}, [orgId]) 
+
       {/* Worker view shows simplified insights */}
       {userRole === 'worker' && (
         <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-white/30">
