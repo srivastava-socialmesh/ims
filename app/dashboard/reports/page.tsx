@@ -67,14 +67,12 @@ export default function ReportsPage() {
   // Auto-generate AI insights when orgId and userRole are available
   useEffect(() => {
     const generateInsights = async () => {
-      // Only generate for admin and manager
       if (!orgId || !userRole || (userRole !== 'admin' && userRole !== 'manager')) {
         return;
       }
 
       setGeneratingInsights(true);
       try {
-        // Get the current session for authorization
         const { data: { session } } = await supabase.auth.getSession();
         
         const { data, error } = await supabase.functions.invoke('ai-insights', {
@@ -129,15 +127,23 @@ export default function ReportsPage() {
           .select('*', { count: 'exact', head: true })
           .eq('organization_id', orgId);
         
-        // Fetch low stock items
-        const { data: lowStockData } = await supabase
+        // Fetch low stock items - fetch all stock with item details and filter client-side
+        const { data: stockData } = await supabase
           .from('stock')
           .select(`
             quantity,
-            items!inner (id, name, reorder_level)
+            items!inner (
+              id,
+              name,
+              reorder_level
+            )
           `)
-          .eq('items.organization_id', orgId)
-          .lt('quantity', supabase.raw('??', ['items.reorder_level']));
+          .eq('items.organization_id', orgId);
+        
+        // Filter low stock items in JavaScript
+        const lowStockItems = (stockData || []).filter(
+          (s: any) => s.items && s.quantity < s.items.reorder_level
+        );
         
         // Fetch movement trend (last 7 days)
         const sevenDaysAgo = new Date();
@@ -171,7 +177,9 @@ export default function ReportsPage() {
           .from('stock')
           .select(`
             quantity,
-            areas!inner (name)
+            areas!inner (
+              name
+            )
           `)
           .eq('areas.organization_id', orgId);
         
@@ -186,12 +194,22 @@ export default function ReportsPage() {
           value
         }));
 
+        // Calculate completion rate from orders
+        const { data: ordersData } = await supabase
+          .from('orders')
+          .select('status')
+          .eq('organization_id', orgId);
+        
+        const completedOrders = (ordersData || []).filter(o => o.status === 'completed').length;
+        const totalOrders = ordersData?.length || 0;
+        const completionRate = totalOrders > 0 ? (completedOrders / totalOrders) * 100 : 0;
+
         setStats({
           totalItems: itemsCount || 0,
           totalMovements: movementsCount || 0,
-          totalOrders: ordersCount || 0,
-          lowStockItems: lowStockData?.length || 0,
-          completionRate: 0 // Calculate from orders
+          totalOrders: totalOrders,
+          lowStockItems: lowStockItems.length,
+          completionRate: Math.round(completionRate)
         });
         
         setMovementTrend(trend);
